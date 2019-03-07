@@ -24,7 +24,7 @@ type frameWriteMsg struct {
 	done chan error
 }
 
-// for debugging only:
+// String: for debugging only:
 func (wm frameWriteMsg) String() string {
 	var streamID uint32
 	if wm.stream != nil {

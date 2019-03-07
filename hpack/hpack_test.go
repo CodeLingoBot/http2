@@ -268,7 +268,7 @@ type encAndWant struct {
 	wantDynSize uint32
 }
 
-// C.3 Request Examples without Huffman Coding
+// TestDecodeC3_NoHuffman: C.3 Request Examples without Huffman Coding
 // http://http2.github.io/http2-spec/compression.html#rfc.section.C.3
 func TestDecodeC3_NoHuffman(t *testing.T) {
 	testDecodeSeries(t, 4096, []encAndWant{
@@ -316,7 +316,7 @@ func TestDecodeC3_NoHuffman(t *testing.T) {
 	})
 }
 
-// C.4 Request Examples with Huffman Coding
+// TestDecodeC4_Huffman: C.4 Request Examples with Huffman Coding
 // http://http2.github.io/http2-spec/compression.html#rfc.section.C.4
 func TestDecodeC4_Huffman(t *testing.T) {
 	testDecodeSeries(t, 4096, []encAndWant{

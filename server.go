@@ -1736,7 +1736,7 @@ func cloneHeader(h http.Header) http.Header {
 	return h2
 }
 
-// The Life Of A Write is like this:
+// Write: The Life Of A Write is like this:
 //
 // * Handler calls w.Write or w.WriteString ->
 // * -> rws.bw (*bufio.Writer) ->

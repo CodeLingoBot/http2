@@ -688,7 +688,7 @@ func testBodyContentsFail(t *testing.T, wantContentLength int64, wantReadError s
 	})
 }
 
-// Using a Host header, instead of :authority
+// TestServer_Request_Get_Host: Using a Host header, instead of :authority
 func TestServer_Request_Get_Host(t *testing.T) {
 	const host = "example.com"
 	testServerRequest(t, func(st *serverTester) {
@@ -705,7 +705,7 @@ func TestServer_Request_Get_Host(t *testing.T) {
 	})
 }
 
-// Using an :authority pseudo-header, instead of Host
+// TestServer_Request_Get_Authority: Using an :authority pseudo-header, instead of Host
 func TestServer_Request_Get_Authority(t *testing.T) {
 	const host = "example.com"
 	testServerRequest(t, func(st *serverTester) {
@@ -769,7 +769,7 @@ func TestServer_Request_WithContinuation(t *testing.T) {
 	})
 }
 
-// Concatenated cookie headers. ("8.1.2.5 Compressing the Cookie Header Field")
+// TestServer_Request_CookieConcat: Concatenated cookie headers. ("8.1.2.5 Compressing the Cookie Header Field")
 func TestServer_Request_CookieConcat(t *testing.T) {
 	const host = "example.com"
 	testServerRequest(t, func(st *serverTester) {
@@ -1057,7 +1057,7 @@ func TestServer_CloseNotify_After_ConnClose(t *testing.T) {
 	testServerPostUnblock(t, blockUntilClosed, func(st *serverTester) { st.cc.Close() }, nil)
 }
 
-// that CloseNotify unblocks after a stream error due to the client's
+// TestServer_CloseNotify_After_StreamError: that CloseNotify unblocks after a stream error due to the client's
 // problem that's unrelated to them explicitly canceling it (which is
 // TestServer_CloseNotify_After_RSTStream above)
 func TestServer_CloseNotify_After_StreamError(t *testing.T) {
@@ -1122,7 +1122,7 @@ func TestServer_StateTransitions(t *testing.T) {
 	}
 }
 
-// test HEADERS w/o EndHeaders + another HEADERS (should get rejected)
+// TestServer_Rejects_HeadersNoEnd_Then_Headers tests HEADERS w/o EndHeaders + another HEADERS (should get rejected)
 func TestServer_Rejects_HeadersNoEnd_Then_Headers(t *testing.T) {
 	testServerRejects(t, func(st *serverTester) {
 		st.writeHeaders(HeadersFrameParam{
@@ -1140,7 +1140,7 @@ func TestServer_Rejects_HeadersNoEnd_Then_Headers(t *testing.T) {
 	})
 }
 
-// test HEADERS w/o EndHeaders + PING (should get rejected)
+// TestServer_Rejects_HeadersNoEnd_Then_Ping tests HEADERS w/o EndHeaders + PING (should get rejected)
 func TestServer_Rejects_HeadersNoEnd_Then_Ping(t *testing.T) {
 	testServerRejects(t, func(st *serverTester) {
 		st.writeHeaders(HeadersFrameParam{
@@ -1155,7 +1155,7 @@ func TestServer_Rejects_HeadersNoEnd_Then_Ping(t *testing.T) {
 	})
 }
 
-// test HEADERS w/ EndHeaders + a continuation HEADERS (should get rejected)
+// TestServer_Rejects_HeadersEnd_Then_Continuation tests HEADERS w/ EndHeaders + a continuation HEADERS (should get rejected)
 func TestServer_Rejects_HeadersEnd_Then_Continuation(t *testing.T) {
 	testServerRejects(t, func(st *serverTester) {
 		st.writeHeaders(HeadersFrameParam{
@@ -1171,7 +1171,7 @@ func TestServer_Rejects_HeadersEnd_Then_Continuation(t *testing.T) {
 	})
 }
 
-// test HEADERS w/o EndHeaders + a continuation HEADERS on wrong stream ID
+// TestServer_Rejects_HeadersNoEnd_Then_ContinuationWrongStream tests HEADERS w/o EndHeaders + a continuation HEADERS on wrong stream ID
 func TestServer_Rejects_HeadersNoEnd_Then_ContinuationWrongStream(t *testing.T) {
 	testServerRejects(t, func(st *serverTester) {
 		st.writeHeaders(HeadersFrameParam{
@@ -1186,7 +1186,7 @@ func TestServer_Rejects_HeadersNoEnd_Then_ContinuationWrongStream(t *testing.T) 
 	})
 }
 
-// No HEADERS on stream 0.
+// TestServer_Rejects_Headers0: No HEADERS on stream 0.
 func TestServer_Rejects_Headers0(t *testing.T) {
 	testServerRejects(t, func(st *serverTester) {
 		st.fr.AllowIllegalWrites = true
@@ -1199,7 +1199,7 @@ func TestServer_Rejects_Headers0(t *testing.T) {
 	})
 }
 
-// No CONTINUATION on stream 0.
+// TestServer_Rejects_Continuation0: No CONTINUATION on stream 0.
 func TestServer_Rejects_Continuation0(t *testing.T) {
 	testServerRejects(t, func(st *serverTester) {
 		st.fr.AllowIllegalWrites = true
@@ -1373,7 +1373,7 @@ func TestServer_Response_TransferEncoding_chunked(t *testing.T) {
 	})
 }
 
-// Header accessed only after the initial write.
+// TestServer_Response_Data_IgnoreHeaderAfterWrite_After: Header accessed only after the initial write.
 func TestServer_Response_Data_IgnoreHeaderAfterWrite_After(t *testing.T) {
 	const msg = "<html>this is HTML."
 	testServerResponse(t, func(w http.ResponseWriter, r *http.Request) error {
@@ -1401,7 +1401,7 @@ func TestServer_Response_Data_IgnoreHeaderAfterWrite_After(t *testing.T) {
 	})
 }
 
-// Header accessed before the initial write and later mutated.
+// TestServer_Response_Data_IgnoreHeaderAfterWrite_Overwrite: Header accessed before the initial write and later mutated.
 func TestServer_Response_Data_IgnoreHeaderAfterWrite_Overwrite(t *testing.T) {
 	const msg = "<html>this is HTML."
 	testServerResponse(t, func(w http.ResponseWriter, r *http.Request) error {
@@ -1582,7 +1582,7 @@ func TestServer_Response_LargeWrite(t *testing.T) {
 	})
 }
 
-// Test that the handler can't write more than the client allows
+// TestServer_Response_LargeWrite_FlowControlled tests that the handler can't write more than the client allows
 func TestServer_Response_LargeWrite_FlowControlled(t *testing.T) {
 	const size = 1 << 20
 	const maxFrameSize = 16 << 10
@@ -1640,7 +1640,7 @@ func TestServer_Response_LargeWrite_FlowControlled(t *testing.T) {
 	})
 }
 
-// Test that the handler blocked in a Write is unblocked if the server sends a RST_STREAM.
+// TestServer_Response_RST_Unblocks_LargeWrite tests that the handler blocked in a Write is unblocked if the server sends a RST_STREAM.
 func TestServer_Response_RST_Unblocks_LargeWrite(t *testing.T) {
 	const size = 1 << 20
 	const maxFrameSize = 16 << 10
@@ -1893,7 +1893,7 @@ func TestServer_Rejects_Too_Many_Streams(t *testing.T) {
 	}
 }
 
-// So many response headers that the server needs to use CONTINUATION frames:
+// TestServer_Response_ManyHeaders_With_Continuation: So many response headers that the server needs to use CONTINUATION frames:
 func TestServer_Response_ManyHeaders_With_Continuation(t *testing.T) {
 	testServerResponse(t, func(w http.ResponseWriter, r *http.Request) error {
 		h := w.Header()
@@ -1921,7 +1921,7 @@ func TestServer_Response_ManyHeaders_With_Continuation(t *testing.T) {
 	})
 }
 
-// This previously crashed (reported by Mathieu Lonjaret as observed
+// TestServer_NoCrash_HandlerClose_Then_ClientClose: This previously crashed (reported by Mathieu Lonjaret as observed
 // while using Camlistore) because we got a DATA frame from the client
 // after the handler exited and our logic at the time was wrong,
 // keeping a stream in the map in stateClosed, which tickled an
